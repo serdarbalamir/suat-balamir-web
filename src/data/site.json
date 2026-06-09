@@ -1,0 +1,27 @@
+{
+  "siteName": "Suat Balamir",
+  "siteTitle": "Suat Balamir — Su, Atıksu ve Yağmur Suyu Yönetimi Üzerine Teknik Yayınlar",
+  "tagline": "Su, Atıksu ve Yağmur Suyu Yönetimi Üzerine Teknik Yayınlar",
+  "description": "Suat Balamir'in su altyapısı, yağmur suyu yönetimi, atıksu sistemleri, kentsel drenaj, DWA standartları ve çevre teknolojileri üzerine teknik makaleleri, mühendislik kaynakları ve sektörel değerlendirmeleri.",
+  "author": {
+    "name": "Suat Balamir",
+    "title": "Genel Müdür Yardımcısı, Gezer Endüstri",
+    "shortBio": "Su, atıksu ve yağmur suyu altyapı sistemleri üzerine uzmanlaşmış makine mühendisi. DWA standartları, CSO yönetimi, kentsel drenaj ve çevre teknolojileri alanlarında yayınlanmış teknik makaleleri bulunmaktadır. Su ve Çevre Teknolojileri Dergisi yazarı.",
+    "linkedin": "https://www.linkedin.com/in/suat-balamir",
+    "email": "info@suatbalamir.com",
+    "phone": "+90 (5xx) xxx xx xx",
+    "photo": "/images/suat-balamir.jpg"
+  },
+  "expertise": [
+    "Yağmur Suyu Yönetimi",
+    "Atıksu ve Kanalizasyon Sistemleri",
+    "CSO (Yağışlı Hava Deşarjı) Yönetimi",
+    "Kentsel Drenaj ve Taşkın Yönetimi",
+    "DWA / ATV Standartları",
+    "Çevre Teknolojileri ve Altyapı Sistemleri"
+  ],
+  "organization": {
+    "name": "Gezer Endüstri",
+    "role": "Genel Müdür Yardımcısı"
+  }
+}

@@ -1,0 +1,20 @@
+---
+import site from '../data/site.json';
+const { author } = site;
+const initials = author.name.split(' ').map((p) => p[0]).join('');
+---
+
+<div class="sidebar-box author-box">
+  <div class="author-head">
+    <div class="author-avatar">{initials}</div>
+    <div>
+      <div class="name">{author.name}</div>
+      <div class="role">{author.title}</div>
+    </div>
+  </div>
+  <p class="bio">{author.shortBio}</p>
+  <div style="display:flex;gap:10px;">
+    <a href={author.linkedin} target="_blank" rel="noopener" class="btn btn-outline" style="padding:8px 16px;font-size:0.85rem;">LinkedIn</a>
+    <a href="/hakkinda" class="btn btn-outline" style="padding:8px 16px;font-size:0.85rem;">Özgeçmiş</a>
+  </div>
+</div>

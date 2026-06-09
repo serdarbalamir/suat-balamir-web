@@ -1,0 +1,15 @@
+{
+  "title": "ATV-A 128'e Göre Özgül Depolama Hacmi ve Taşma Oranı İlişkisi",
+  "type": "line",
+  "description": "Birleşik sistemde özgül depolama hacmi arttıkça alıcı ortama yıllık taşma oranının azalması (temsili eğri).",
+  "source": "ATV-A 128 emisyon yaklaşımı (800 mm/yıl referans yağış için temsili değerler)",
+  "labels": ["0", "5", "10", "15", "20", "25", "30", "35", "40"],
+  "datasets": [
+    {
+      "label": "Yıllık taşma oranı e₀ (%)",
+      "data": [100, 72, 55, 44, 36, 30, 26, 23, 20]
+    }
+  ],
+  "yAxisLabel": "Taşma oranı (%)",
+  "xAxisLabel": "Özgül depolama hacmi Vs (m³/ha)"
+}

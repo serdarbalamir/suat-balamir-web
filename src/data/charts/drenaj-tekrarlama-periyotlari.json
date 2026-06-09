@@ -1,0 +1,15 @@
+{
+  "title": "EN 752'ye Göre Tasarım Tekrarlama Periyotları — Uygulama Karşılaştırması",
+  "type": "bar",
+  "description": "Kırsal, konut ve şehir merkezi alanları için ülkelere göre uygulanan tipik tasarım tekrarlama periyotları (yıl).",
+  "source": "EN 752, ulusal ekler ve yerel tasarım kılavuzları (temsili değerler)",
+  "labels": ["Kırsal alan", "Konut bölgesi", "Şehir merkezi", "Yeraltı geçidi / kritik altyapı"],
+  "datasets": [
+    { "label": "Türkiye (yaygın uygulama)", "data": [2, 2, 5, 10] },
+    { "label": "İsveç (P110)", "data": [2, 5, 10, 20] },
+    { "label": "Norveç", "data": [2, 5, 10, 25] },
+    { "label": "Danimarka", "data": [2, 5, 10, 20] }
+  ],
+  "yAxisLabel": "Tekrarlama periyodu (yıl)",
+  "xAxisLabel": "Alan türü"
+}

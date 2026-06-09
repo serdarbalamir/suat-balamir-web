@@ -1,0 +1,34 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { formatDate } from '../lib/utils';
+
+interface Props {
+  insight: CollectionEntry<'icgoruler'>;
+}
+
+const { insight } = Astro.props;
+const { title, pubDate, konu, linkedinUrl, tags } = insight.data;
+---
+
+<article
+  class="insight-card"
+  data-konu={konu}
+  data-search={`${title} ${insight.body ?? ''} ${tags.join(' ')}`.toLocaleLowerCase('tr')}
+>
+  <span class="topic">{konu}</span>
+  <h3>{title}</h3>
+  <div class="body prose" style="font-size:0.93rem;">
+    <slot />
+  </div>
+  {tags.length > 0 && (
+    <div style="display:flex;flex-wrap:wrap;gap:6px;">
+      {tags.map((t) => <span class="tag">{t}</span>)}
+    </div>
+  )}
+  <div class="meta">
+    <span>{formatDate(pubDate)}</span>
+    {linkedinUrl && (
+      <a href={linkedinUrl} target="_blank" rel="noopener">LinkedIn'de görüntüle →</a>
+    )}
+  </div>
+</article>

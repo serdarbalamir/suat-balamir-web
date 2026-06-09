@@ -1,0 +1,58 @@
+---
+/**
+ * Arama kutusu + kategori filtre çipleri.
+ * Aynı sayfadaki `[data-search]` ve `[data-kategori]` öznitelikli
+ * kartları istemci tarafında filtreler.
+ */
+interface Props {
+  categories: readonly string[];
+  searchPlaceholder?: string;
+  /** Kartlardaki filtre özniteliği (varsayılan: data-kategori) */
+  attr?: string;
+}
+
+const { categories, searchPlaceholder = 'Ara...', attr = 'data-kategori' } = Astro.props;
+---
+
+<div class="toolbar" data-filter-toolbar data-attr={attr}>
+  <input type="search" placeholder={searchPlaceholder} aria-label="İçerikte ara" />
+  <div class="filter-chips">
+    <button class="active" data-cat="">Tümü</button>
+    {categories.map((c) => <button data-cat={c}>{c}</button>)}
+  </div>
+</div>
+<p class="empty-state" data-empty>Aramanızla eşleşen içerik bulunamadı.</p>
+
+<script>
+  document.querySelectorAll('[data-filter-toolbar]').forEach((toolbar) => {
+    const attr = toolbar.getAttribute('data-attr') || 'data-kategori';
+    const input = toolbar.querySelector('input');
+    const chips = toolbar.querySelectorAll('.filter-chips button');
+    const emptyEl = toolbar.parentElement?.querySelector('[data-empty]');
+    let activeCat = '';
+
+    function apply() {
+      const q = (input?.value || '').toLocaleLowerCase('tr').trim();
+      const cards = document.querySelectorAll(`[data-search]`);
+      let visible = 0;
+      cards.forEach((card) => {
+        const matchCat = !activeCat || card.getAttribute(attr) === activeCat;
+        const matchQ = !q || (card.getAttribute('data-search') || '').includes(q);
+        const show = matchCat && matchQ;
+        (card as HTMLElement).style.display = show ? '' : 'none';
+        if (show) visible++;
+      });
+      if (emptyEl) (emptyEl as HTMLElement).style.display = visible === 0 ? 'block' : 'none';
+    }
+
+    input?.addEventListener('input', apply);
+    chips.forEach((chip) => {
+      chip.addEventListener('click', () => {
+        chips.forEach((c) => c.classList.remove('active'));
+        chip.classList.add('active');
+        activeCat = chip.getAttribute('data-cat') || '';
+        apply();
+      });
+    });
+  });
+</script>

@@ -1,0 +1,48 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import LibraryCard from '../../components/LibraryCard.astro';
+import FilterToolbar from '../../components/FilterToolbar.astro';
+import { KUTUPHANE_KATEGORILERI } from '../../content.config';
+
+const entries = (await getCollection('kutuphane', ({ data }) => !data.draft)).sort(
+  (a, b) =>
+    Number(b.data.featured) - Number(a.data.featured) ||
+    b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+);
+
+const usedCategories = KUTUPHANE_KATEGORILERI.filter((c) =>
+  entries.some((e) => e.data.kategori === c)
+);
+---
+
+<BaseLayout
+  title="Teknik Kütüphane"
+  description="DWA-M 153, EN 752 ve diğer standartların özetleri, drenaj hesaplamaları, kirlilik sınıflandırmaları, tasarım kriterleri ve hidrolik referanslar."
+>
+  <div class="page-header">
+    <div class="container">
+      <nav class="breadcrumb" aria-label="breadcrumb">
+        <a href="/">Ana Sayfa</a> <span>/</span> <span>Teknik Kütüphane</span>
+      </nav>
+      <h1>Teknik Kütüphane</h1>
+      <p>
+        Yapılandırılmış mühendislik bilgisi: standart özetleri (DWA, EN, ATV), hesaplama
+        yöntemleri, tasarım kriterleri, kirlilik sınıflandırmaları ve uluslararası
+        karşılaştırmalar. Saha mühendisleri ve tasarımcılar için referans kaynağı.
+      </p>
+    </div>
+  </div>
+
+  <section class="section">
+    <div class="container">
+      <FilterToolbar
+        categories={usedCategories}
+        searchPlaceholder="Standart, yöntem veya konu ara... (ör. DWA-M 153)"
+      />
+      <div class="grid grid-3">
+        {entries.map((e) => <LibraryCard entry={e} />)}
+      </div>
+    </div>
+  </section>
+</BaseLayout>

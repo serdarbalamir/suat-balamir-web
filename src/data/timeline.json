@@ -1,0 +1,30 @@
+{
+  "career": [
+    {
+      "period": "Günümüz",
+      "role": "Genel Müdür Yardımcısı",
+      "org": "Gezer Endüstri",
+      "description": "Su, atıksu ve yağmur suyu altyapı ürünlerinin geliştirilmesi, teknik projelendirme ve mühendislik çözümleri süreçlerinin yönetimi. DWA standartlarına dayalı tasarım yaklaşımlarının ürün ve proje süreçlerine entegrasyonu."
+    },
+    {
+      "period": "—",
+      "role": "Teknik Yayın Yazarı",
+      "org": "Su ve Çevre Teknolojileri Dergisi",
+      "description": "Yağmur suyu yönetimi, CSO yönetimi, geciktirme deposu tasarımı ve kentsel drenaj konularında düzenli teknik makaleler. (Dönem bilgilerini CMS üzerinden güncelleyiniz.)"
+    },
+    {
+      "period": "—",
+      "role": "Önceki Görevler",
+      "org": "(Düzenlenecek)",
+      "description": "Bu alan yer tutucudur — kariyer geçmişi src/data/timeline.json dosyasından veya yönetim panelinden güncellenebilir."
+    }
+  ],
+  "education": [
+    {
+      "period": "—",
+      "role": "Lisans / Yüksek Lisans",
+      "org": "(Üniversite bilgisi düzenlenecek)",
+      "description": "Bu alan yer tutucudur — eğitim bilgileri timeline.json üzerinden güncellenebilir."
+    }
+  ]
+}
