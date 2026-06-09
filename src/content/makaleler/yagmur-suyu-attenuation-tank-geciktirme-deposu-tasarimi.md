@@ -1,11 +1,13 @@
 ---
 title: "Yağmur Suyu Yönetiminde Attenuation Tank (Geciktirme Deposu) Tasarımı"
 description: "Geciktirme depolarının işlevi, DWA-A 117 standardına göre hacim boyutlandırma yaklaşımı ve pik debi kontrolünün kentsel taşkın yönetimindeki rolü."
-pubDate: 2026-06-01
-ilkYayinTarihi: 2026-06-01
+pubDate: 2026-06-09
+ilkYayinTarihi: 2026-06-09
 ilkYayinKaynagi: "Su ve Çevre Teknolojileri Dergisi, Sayı 215"
 ilkYayinUrl: "https://www.suvecevre.com/yayin/1289/yagmur-suyu-yonetiminde-attenuation-tank-geciktirme-deposu-tasarimi_40073.html"
 kategori: "Yağmur Suyu Yönetimi"
+image: "/images/makaleler/attenuation-tank.jpg"
+imageAlt: "Yeraltı yağmur suyu geciktirme deposu (attenuation tank) saha uygulaması"
 tags:
   - geciktirme deposu
   - attenuation tank

@@ -1,0 +1,14 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "suat-balamir-web",
+      "runtimeExecutable": "/Users/serdarbalamir/.local/node/bin/npm",
+      "runtimeArgs": ["run", "dev", "--", "--port", "4399"],
+      "port": 4399,
+      "env": {
+        "PATH": "/Users/serdarbalamir/.local/node/bin:/usr/local/bin:/usr/bin:/bin"
+      }
+    }
+  ]
+}

@@ -10,4 +10,7 @@ export default defineConfig({
   build: {
     format: 'file',
   },
+  redirects: {
+    '/admin': '/admin/index.html',
+  },
 });

@@ -23,7 +23,9 @@ const {
 } = Astro.props;
 
 const pageTitle = title ? `${title} | ${site.siteName}` : site.siteTitle;
-const canonical = new URL(Astro.url.pathname, Astro.site);
+// Temiz kanonik URL: /index.html ve .html uzantılarını kaldır (sitemap ile tutarlı)
+const cleanPath = Astro.url.pathname.replace(/\/index\.html$/, '/').replace(/\.html$/, '');
+const canonical = new URL(cleanPath, Astro.site);
 const resolvedOgImage = ogImage ? new URL(ogImage, Astro.site).href : undefined;
 const currentPath = Astro.url.pathname.replace(/\/$/, '') || '/';
 
@@ -85,7 +87,6 @@ const schemas = [personSchema, ...(schema ? (Array.isArray(schema) ? schema : [s
       <div class="container">
         <a href="/" class="brand" aria-label="Ana sayfa">
           <span class="brand-name">Suat Balamir</span>
-          <span class="brand-sub">Su · Atıksu · Yağmur Suyu Yönetimi</span>
         </a>
         <button class="nav-toggle" aria-label="Menüyü aç" aria-expanded="false">
           <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">

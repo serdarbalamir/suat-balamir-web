@@ -1,9 +1,13 @@
 ---
 title: "DWA-M 153 Standartları Çerçevesinde Yağmur Suyu Yüzey Kirlenme Sınıfları"
 description: "DWA-M 153 kılavuzuna göre yağmur suyu kalitesinin yüzey tipine bağlı sınıflandırılması, alıcı ortam hassasiyeti değerlendirmesi ve arıtma gerekliliğinin belirlenmesi."
-pubDate: 2026-04-10
-ilkYayinKaynagi: "Su ve Çevre Teknolojileri Dergisi"
+pubDate: 2026-04-09
+ilkYayinTarihi: 2026-04-09
+ilkYayinKaynagi: "Su ve Çevre Teknolojileri Dergisi, Sayı 213"
+ilkYayinUrl: "https://www.suvecevre.com/yayin/1281/dwa-standartlari-cercevesinde-yagmur-suyu-yuzey-kirlenme-siniflari-dwa-m-153-uzerine-bir-degerlendirme_39621.html"
 kategori: "DWA Standartları"
+image: "/images/makaleler/dwa-m-153.jpg"
+imageAlt: "DWA-M 153 kapsamında yağmur suyu yüzey kirlenme sınıfları"
 tags:
   - DWA-M 153
   - yağmur suyu kalitesi

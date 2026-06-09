@@ -6,6 +6,8 @@ ilkYayinTarihi: 2026-03-06
 ilkYayinKaynagi: "Su ve Çevre Teknolojileri Dergisi, Sayı 212"
 ilkYayinUrl: "https://www.suvecevre.com/yayin/1276/birlesik-kanalizasyon-sistemlerinde-yagisli-hava-desarjlarinin-cso-yonetimi_39369.html"
 kategori: "CSO Yönetimi"
+image: "/images/makaleler/cso-yonetimi.jpg"
+imageAlt: "Birleşik kanalizasyon sisteminde yağışlı hava deşarjı (CSO) yönetimi"
 tags:
   - CSO
   - ATV-A 128

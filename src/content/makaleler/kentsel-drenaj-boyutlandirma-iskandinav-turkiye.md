@@ -1,9 +1,13 @@
 ---
 title: "Kentsel Drenaj ve Kanalizasyon Sistemlerinin Boyutlandırılması: İskandinav Ülkeleri ve Türkiye Karşılaştırması"
 description: "EN 752 çerçevesinde tasarım tekrarlama periyotları, iklim değişikliği katsayıları ve taşkın güvenliği yaklaşımlarının İsveç, Norveç, Danimarka ve Türkiye uygulamaları üzerinden karşılaştırılması."
-pubDate: 2026-05-15
-ilkYayinKaynagi: "Su ve Çevre Teknolojileri Dergisi"
+pubDate: 2026-05-11
+ilkYayinTarihi: 2026-05-11
+ilkYayinKaynagi: "Su ve Çevre Teknolojileri Dergisi, Sayı 214"
+ilkYayinUrl: "https://www.suvecevre.com/yayin/1285/kentsel-drenaj-ve-kanalizasyon-sistemlerinin-boyutlandirilmasi-iskandinav-ulkelerinde-muhendislik-uygulamalari-ve-turkiye-degerlendirmesi_39863.html"
 kategori: "Kentsel Drenaj"
+image: "/images/makaleler/iskandinav-karsilastirma.jpg"
+imageAlt: "Kentsel drenaj ve kanalizasyon sistemlerinin boyutlandırılması — İskandinav ülkeleri karşılaştırması"
 tags:
   - EN 752
   - tekrarlama periyodu
