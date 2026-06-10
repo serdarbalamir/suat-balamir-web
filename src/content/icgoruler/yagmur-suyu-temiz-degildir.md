@@ -1,12 +1,13 @@
 ---
-title: "Yağmur Suyu \"Temiz Su\" Değildir"
+title: Yağmur Suyu "Temiz Su" Değildir
 pubDate: 2026-04-15
-konu: "Yağmur Suyu Kalitesi"
-linkedinUrl: "https://www.linkedin.com/in/suat-balamir"
+konu: Yağmur Suyu Kalitesi
+linkedinUrl: https://www.linkedin.com/posts/suat-balamir-806b3318_yagmursuyuy%C3%B6netimi-activity-7463130759596429314-WN3g?utm_source=share&utm_medium=member_desktop&rcm=ACoAACUBHs4Bs-dfQEE-Gw2ne78X30sg-SKv9i8
 tags:
   - DWA-M 153
   - yağmur suyu kalitesi
   - kirlilik
+featured: true
 draft: false
 ---
 
