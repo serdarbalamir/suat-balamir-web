@@ -3,15 +3,20 @@
 #
 # YEREL KULLANIM:  npm run cms  komutu ile (decap-server + astro dev)
 #                  http://localhost:4321/admin adresinden giriş yapılır.
+#                  (local_backend yalnızca localhost'ta devreye girer.)
 #
-# CANLI KULLANIM:  Site GitHub + Netlify üzerinde yayınlandığında
-#                  aşağıdaki backend bloğunu git-gateway veya github
-#                  olarak güncelleyin ve local_backend satırını silin.
+# CANLI KULLANIM:  suatbalamir.netlify.app/admin — GitHub hesabıyla
+#                  giriş yapılır. Kaydedilen her değişiklik GitHub'a
+#                  commit edilir ve Netlify siteyi otomatik yeniden
+#                  derler. OAuth, Netlify "Access control > OAuth"
+#                  bölümünde tanımlı GitHub OAuth App ile çalışır.
 # =====================================================================
 
 backend:
-  name: git-gateway
+  name: github
+  repo: serdarbalamir/suat-balamir-web
   branch: main
+  base_url: https://api.netlify.com
 
 # Yerel geliştirme: decap-server çalışırken giriş gerektirmez
 local_backend: true
