@@ -1,13 +1,14 @@
 ---
-title: "Birleşik Kanalizasyon Sistemlerinde Yağışlı Hava Deşarjlarının (CSO) Yönetimi"
-description: "Alman ATV-A 128 ve DWA-A 166 standartları çerçevesinde birleşik kanalizasyon sistemlerinde yağışlı hava deşarjlarının yönetimi ve Türkiye mevzuatı ile karşılaştırmalı değerlendirme."
+title: Birleşik Kanalizasyon Sistemlerinde Yağışlı Hava Deşarjlarının (CSO)
+  Yönetimi deneme
+description: Alman ATV-A 128 ve DWA-A 166 standartları çerçevesinde birleşik
+  kanalizasyon sistemlerinde yağışlı hava deşarjlarının yönetimi ve Türkiye
+  mevzuatı ile karşılaştırmalı değerlendirme.
 pubDate: 2026-03-06
 ilkYayinTarihi: 2026-03-06
-ilkYayinKaynagi: "Su ve Çevre Teknolojileri Dergisi, Sayı 212"
-ilkYayinUrl: "https://www.suvecevre.com/yayin/1276/birlesik-kanalizasyon-sistemlerinde-yagisli-hava-desarjlarinin-cso-yonetimi_39369.html"
-kategori: "CSO Yönetimi"
-image: "/images/makaleler/cso-yonetimi.jpg"
-imageAlt: "Birleşik kanalizasyon sisteminde yağışlı hava deşarjı (CSO) yönetimi"
+ilkYayinKaynagi: Su ve Çevre Teknolojileri Dergisi, Sayı 212
+ilkYayinUrl: https://www.suvecevre.com/yayin/1276/birlesik-kanalizasyon-sistemlerinde-yagisli-hava-desarjlarinin-cso-yonetimi_39369.html
+kategori: CSO Yönetimi
 tags:
   - CSO
   - ATV-A 128
@@ -15,6 +16,8 @@ tags:
   - birleşik kanalizasyon
   - alıcı ortam
   - taşma yapısı
+image: /images/makaleler/cso-yonetimi.jpg
+imageAlt: Birleşik kanalizasyon sisteminde yağışlı hava deşarjı (CSO) yönetimi
 featured: true
 draft: false
 ---
