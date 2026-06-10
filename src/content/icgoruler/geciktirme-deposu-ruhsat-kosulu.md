@@ -2,7 +2,7 @@
 title: "Geciktirme Hacmi Ruhsat Koşulu Olmalı"
 pubDate: 2026-06-05
 konu: "Mevzuat"
-linkedinUrl: "https://www.linkedin.com/in/suat-balamir"
+linkedinUrl: "https://www.linkedin.com/in/suat-balamir-806b3318/"
 tags:
   - geciktirme deposu
   - imar mevzuatı

@@ -2,7 +2,7 @@
 title: "Eski İDF Eğrileriyle Yeni İklime Tasarım Yapılamaz"
 pubDate: 2026-05-02
 konu: "İklim Değişikliği"
-linkedinUrl: "https://www.linkedin.com/in/suat-balamir"
+linkedinUrl: "https://www.linkedin.com/in/suat-balamir-806b3318/"
 tags:
   - İDF
   - iklim değişikliği

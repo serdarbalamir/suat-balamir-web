@@ -2,7 +2,7 @@
 title: "CSO İzleme Neden Türkiye'nin Önceliği Olmalı?"
 pubDate: 2026-03-12
 konu: "CSO Yönetimi"
-linkedinUrl: "https://www.linkedin.com/in/suat-balamir"
+linkedinUrl: "https://www.linkedin.com/in/suat-balamir-806b3318/"
 tags:
   - CSO
   - izleme

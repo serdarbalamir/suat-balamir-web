@@ -2,11 +2,14 @@
 import site from '../data/site.json';
 const { author } = site;
 const initials = author.name.split(' ').map((p) => p[0]).join('');
+const hasPhoto = Boolean(author.photo);
 ---
 
 <div class="sidebar-box author-box">
   <div class="author-head">
-    <div class="author-avatar">{initials}</div>
+    <div class="author-avatar">
+      {hasPhoto ? <img src={author.photo} alt={author.name} loading="lazy" /> : initials}
+    </div>
     <div>
       <div class="name">{author.name}</div>
       <div class="role">{author.title}</div>
