@@ -1,5 +1,5 @@
 ---
-title: "Vorteks Tip Debi Regülatörü"
+title: "Hidrofrenler-Debi Kontrolü"
 description: "Geciktirme depoları ve CSO yapılarında hareketli parça olmadan sabit kısma debisi sağlayan vorteks akış kontrol elemanı."
 kategori: "Drenaj Çözümleri"
 specs:

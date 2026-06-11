@@ -31,8 +31,8 @@ const currentPath = Astro.url.pathname.replace(/\/$/, '') || '/';
 
 const nav = [
   { href: '/makaleler', label: 'Makaleler' },
-  { href: '/teknik-kutuphane', label: 'Teknik Kütüphane' },
-  { href: '/linkedin-icgoruleri', label: 'LinkedIn İçgörüleri' },
+  { href: '/teknik-kutuphane', label: 'Teknik Yayınlar' },
+  { href: '/linkedin-icgoruleri', label: 'LinkedIn Gönderilerim' },
   { href: '/urunler', label: 'Ürünler' },
   { href: '/hakkinda', label: 'Hakkında' },
 ];
@@ -120,8 +120,8 @@ const schemas = [personSchema, ...(schema ? (Array.isArray(schema) ? schema : [s
             <h4>İçerik</h4>
             <ul>
               <li><a href="/makaleler">Makaleler</a></li>
-              <li><a href="/teknik-kutuphane">Teknik Kütüphane</a></li>
-              <li><a href="/linkedin-icgoruleri">LinkedIn İçgörüleri</a></li>
+              <li><a href="/teknik-kutuphane">Teknik Yayınlar</a></li>
+              <li><a href="/linkedin-icgoruleri">LinkedIn Gönderilerim</a></li>
               <li><a href="/urunler">Ürünler ve Çözümler</a></li>
             </ul>
           </div>
