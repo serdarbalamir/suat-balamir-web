@@ -22,8 +22,8 @@ backend:
 local_backend: true
 
 locale: tr
-site_url: https://www.suatbalamir.com
-display_url: https://www.suatbalamir.com
+site_url: https://suatbalamir.com
+display_url: https://suatbalamir.com
 logo_url: /favicon.svg
 
 media_folder: public/uploads
