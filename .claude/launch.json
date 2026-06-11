@@ -3,12 +3,9 @@
   "configurations": [
     {
       "name": "suat-balamir-web",
-      "runtimeExecutable": "/Users/serdarbalamir/.local/node/bin/npm",
+      "runtimeExecutable": "npm",
       "runtimeArgs": ["run", "dev", "--", "--port", "4399"],
-      "port": 4399,
-      "env": {
-        "PATH": "/Users/serdarbalamir/.local/node/bin:/usr/local/bin:/usr/bin:/bin"
-      }
+      "port": 4399
     }
   ]
 }
