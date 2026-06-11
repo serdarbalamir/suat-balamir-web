@@ -1,0 +1,52 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ProductCard from '../../components/ProductCard.astro';
+import FilterToolbar from '../../components/FilterToolbar.astro';
+import { URUN_KATEGORILERI } from '../../content.config';
+
+const products = (await getCollection('urunler', ({ data }) => !data.draft)).sort(
+  (a, b) =>
+    Number(b.data.featured) - Number(a.data.featured) || a.data.order - b.data.order
+);
+
+const usedCategories = URUN_KATEGORILERI.filter((c) =>
+  products.some((p) => p.data.kategori === c)
+);
+---
+
+<BaseLayout
+  title="Ürünler ve Çözümler"
+  description="Yağmur suyu yönetimi, atıksu sistemleri ve kentsel drenaj altyapısına yönelik ürünler ve mühendislik çözümleri."
+>
+  <div class="page-header">
+    <div class="container">
+      <nav class="breadcrumb" aria-label="breadcrumb">
+        <a href="/">Ana Sayfa</a> <span>/</span> <span>Ürünler</span>
+      </nav>
+      <h1>Ürünler ve Çözümler</h1>
+      <p>
+        Yağmur suyu yönetimi, atıksu sistemleri ve kentsel drenaj altyapısına yönelik
+        ürünler, teknolojiler ve mühendislik çözümleri. Teknik özellikler, kullanım
+        alanları ve indirilebilir dokümanlarla birlikte.
+      </p>
+    </div>
+  </div>
+
+  <section class="section">
+    <div class="container">
+      <FilterToolbar categories={usedCategories} searchPlaceholder="Ürün veya çözüm ara..." />
+      <div class="grid grid-3">
+        {products.map((p) => <ProductCard product={p} />)}
+      </div>
+    </div>
+  </section>
+
+  <section class="cta-band">
+    <div class="container">
+      <h2>Ürün Bilgisi ve Teklif</h2>
+      <p>Ürünler hakkında detaylı teknik bilgi, projelendirme desteği veya teklif talepleriniz için iletişime geçebilirsiniz.</p>
+      <a href="/iletisim" class="btn btn-light">İletişime Geç</a>
+    </div>
+  </section>
+</BaseLayout>

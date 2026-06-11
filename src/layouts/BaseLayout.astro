@@ -1,0 +1,159 @@
+---
+import '@fontsource-variable/inter';
+import '../styles/global.css';
+import site from '../data/site.json';
+
+interface Props {
+  title?: string;
+  description?: string;
+  ogType?: string;
+  ogImage?: string;
+  /** Sayfaya özel ek JSON-LD şeması */
+  schema?: Record<string, unknown> | Record<string, unknown>[];
+  noindex?: boolean;
+}
+
+const {
+  title,
+  description = site.description,
+  ogType = 'website',
+  ogImage,
+  schema,
+  noindex = false,
+} = Astro.props;
+
+const pageTitle = title ? `${title} | ${site.siteName}` : site.siteTitle;
+// Temiz kanonik URL: /index.html ve .html uzantılarını kaldır (sitemap ile tutarlı)
+const cleanPath = Astro.url.pathname.replace(/\/index\.html$/, '/').replace(/\.html$/, '');
+const canonical = new URL(cleanPath, Astro.site);
+const resolvedOgImage = ogImage ? new URL(ogImage, Astro.site).href : undefined;
+const currentPath = Astro.url.pathname.replace(/\/$/, '') || '/';
+
+const nav = [
+  { href: '/makaleler', label: 'Makaleler' },
+  { href: '/teknik-kutuphane', label: 'Teknik Kütüphane' },
+  { href: '/linkedin-icgoruleri', label: 'LinkedIn İçgörüleri' },
+  { href: '/urunler', label: 'Ürünler' },
+  { href: '/hakkinda', label: 'Hakkında' },
+];
+
+// Site geneli Person şeması
+const personSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: site.author.name,
+  jobTitle: site.author.title,
+  worksFor: { '@type': 'Organization', name: site.organization.name },
+  url: Astro.site?.href,
+  sameAs: [site.author.linkedin],
+  knowsAbout: site.expertise,
+};
+
+const schemas = [personSchema, ...(schema ? (Array.isArray(schema) ? schema : [schema]) : [])];
+---
+
+<!doctype html>
+<html lang="tr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <link rel="alternate" type="application/rss+xml" title={site.siteTitle} href={new URL('/rss.xml', Astro.site)} />
+    <title>{pageTitle}</title>
+    <meta name="description" content={description} />
+    <meta name="author" content={site.author.name} />
+    <link rel="canonical" href={canonical} />
+    {noindex && <meta name="robots" content="noindex" />}
+
+    <!-- OpenGraph -->
+    <meta property="og:type" content={ogType} />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:site_name" content={site.siteTitle} />
+    <meta property="og:locale" content="tr_TR" />
+    {resolvedOgImage && <meta property="og:image" content={resolvedOgImage} />}
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content={resolvedOgImage ? 'summary_large_image' : 'summary'} />
+    <meta name="twitter:title" content={pageTitle} />
+    <meta name="twitter:description" content={description} />
+    {resolvedOgImage && <meta name="twitter:image" content={resolvedOgImage} />}
+
+    {schemas.map((s) => <script type="application/ld+json" set:html={JSON.stringify(s)} />)}
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container">
+        <a href="/" class="brand" aria-label="Ana sayfa">
+          <span class="brand-name">{site.siteName}</span>
+        </a>
+        <button class="nav-toggle" aria-label="Menüyü aç" aria-expanded="false">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
+            <line x1="3" y1="6" x2="21" y2="6" /><line x1="3" y1="12" x2="21" y2="12" /><line x1="3" y1="18" x2="21" y2="18" />
+          </svg>
+        </button>
+        <nav class="site-nav" aria-label="Ana menü">
+          {nav.map((item) => (
+            <a href={item.href} class={currentPath.startsWith(item.href) ? 'active' : ''}>
+              {item.label}
+            </a>
+          ))}
+          <a href="/iletisim" class="nav-cta">İletişim</a>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <slot />
+    </main>
+
+    <footer class="site-footer">
+      <div class="container">
+        <div class="footer-grid">
+          <div class="footer-brand">
+            <span class="brand-name">{site.siteName}</span>
+            <p>{site.tagline}. {site.organization.name} bünyesinde {site.organization.role} olarak görev yapmaktadır.</p>
+          </div>
+          <div>
+            <h4>İçerik</h4>
+            <ul>
+              <li><a href="/makaleler">Makaleler</a></li>
+              <li><a href="/teknik-kutuphane">Teknik Kütüphane</a></li>
+              <li><a href="/linkedin-icgoruleri">LinkedIn İçgörüleri</a></li>
+              <li><a href="/urunler">Ürünler ve Çözümler</a></li>
+            </ul>
+          </div>
+          <div>
+            <h4>Kurumsal</h4>
+            <ul>
+              <li><a href="/hakkinda">Hakkında</a></li>
+              <li><a href="/iletisim">İletişim</a></li>
+              <li><a href={site.author.linkedin} target="_blank" rel="noopener">LinkedIn</a></li>
+            </ul>
+          </div>
+          <div>
+            <h4>Uzmanlık Alanları</h4>
+            <ul>
+              {site.expertise.slice(0, 5).map((e) => <li>{e}</li>)}
+            </ul>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          <span>© {new Date().getFullYear()} {site.author.name}. Tüm hakları saklıdır.</span>
+          <span>Su, atıksu ve yağmur suyu yönetimi üzerine teknik yayın platformu</span>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      const toggle = document.querySelector('.nav-toggle');
+      const navEl = document.querySelector('.site-nav');
+      toggle?.addEventListener('click', () => {
+        const open = navEl?.classList.toggle('open');
+        toggle.setAttribute('aria-expanded', String(!!open));
+      });
+    </script>
+  </body>
+</html>

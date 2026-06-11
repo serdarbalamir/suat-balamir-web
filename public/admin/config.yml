@@ -1,0 +1,272 @@
+# =====================================================================
+# Decap CMS yapılandırması — Suat Balamir Teknik Yayın Platformu
+#
+# YEREL KULLANIM:  npm run cms  komutu ile (decap-server + astro dev)
+#                  http://localhost:4321/admin adresinden giriş yapılır.
+#                  (local_backend yalnızca localhost'ta devreye girer.)
+#
+# CANLI KULLANIM:  suatbalamir.netlify.app/admin — GitHub hesabıyla
+#                  giriş yapılır. Kaydedilen her değişiklik GitHub'a
+#                  commit edilir ve Netlify siteyi otomatik yeniden
+#                  derler. OAuth, Netlify "Access control > OAuth"
+#                  bölümünde tanımlı GitHub OAuth App ile çalışır.
+# =====================================================================
+
+backend:
+  name: github
+  repo: serdarbalamir/suat-balamir-web
+  branch: main
+  base_url: https://api.netlify.com
+
+# Yerel geliştirme: decap-server çalışırken giriş gerektirmez
+local_backend: true
+
+locale: tr
+site_url: https://suatbalamir.com
+display_url: https://suatbalamir.com
+logo_url: /favicon.svg
+
+media_folder: public/uploads
+public_folder: /uploads
+
+collections:
+  # ------------------------------------------------------------------
+  # MAKALELER
+  # ------------------------------------------------------------------
+  - name: makaleler
+    label: "Makaleler"
+    label_singular: "Makale"
+    folder: src/content/makaleler
+    create: true
+    delete: true
+    slug: "{{slug}}"
+    preview_path: "makaleler/{{slug}}"
+    sortable_fields: [title, pubDate]
+    fields:
+      - { name: title, label: "Başlık", widget: string }
+      - { name: description, label: "Özet (SEO açıklaması)", widget: text, hint: "1-2 cümle. Arama motorlarında ve kartlarda görünür." }
+      - { name: pubDate, label: "Yayın Tarihi (bu sitede)", widget: datetime, format: "YYYY-MM-DD", time_format: false }
+      - { name: updatedDate, label: "Güncelleme Tarihi", widget: datetime, format: "YYYY-MM-DD", time_format: false, required: false }
+      - { name: ilkYayinTarihi, label: "İlk Yayın Tarihi", widget: datetime, format: "YYYY-MM-DD", time_format: false, required: false, hint: "Makale daha önce başka bir kaynakta yayınlandıysa" }
+      - { name: ilkYayinKaynagi, label: "İlk Yayınlandığı Kaynak", widget: string, required: false, hint: "Örn: Su ve Çevre Teknolojileri Dergisi, Sayı 212" }
+      - { name: ilkYayinUrl, label: "İlk Yayın Bağlantısı", widget: string, required: false }
+      - name: kategori
+        label: "Kategori"
+        widget: select
+        options:
+          - "Yağmur Suyu Yönetimi"
+          - "Kanalizasyon Sistemleri"
+          - "DWA Standartları"
+          - "CSO Yönetimi"
+          - "Kentsel Drenaj"
+          - "Çevre Teknolojileri"
+          - "Altyapı Sistemleri"
+          - "Ürün İncelemeleri"
+          - "Teknik Görüşler"
+      - { name: tags, label: "Etiketler", widget: list, required: false, hint: "Virgülle ayırarak yazabilirsiniz" }
+      - { name: image, label: "Kapak Görseli", widget: image, required: false }
+      - { name: imageAlt, label: "Görsel Açıklaması (alt metin)", widget: string, required: false }
+      - { name: pdf, label: "İndirilebilir PDF", widget: file, required: false }
+      - { name: featured, label: "Öne Çıkan", widget: boolean, default: false, hint: "Ana sayfada gösterilir" }
+      - { name: draft, label: "Taslak", widget: boolean, default: false, hint: "İşaretliyse sitede yayınlanmaz" }
+      - name: body
+        label: "Makale İçeriği"
+        widget: markdown
+        hint: >
+          Grafik eklemek için: <div data-chart="grafik-adi"></div>
+          Teknik kutu için: <div class="callout callout-teknik"><p class="callout-title">Teknik Not</p><p>...</p></div>
+          Kutu türleri: callout-teknik, callout-standart, callout-uyari, callout-formul
+
+  # ------------------------------------------------------------------
+  # LINKEDIN İÇGÖRÜLERİ
+  # ------------------------------------------------------------------
+  - name: icgoruler
+    label: "LinkedIn İçgörüleri"
+    label_singular: "İçgörü"
+    folder: src/content/icgoruler
+    create: true
+    delete: true
+    slug: "{{slug}}"
+    sortable_fields: [title, pubDate]
+    fields:
+      - { name: title, label: "Başlık", widget: string }
+      - { name: pubDate, label: "Yayın Tarihi", widget: datetime, format: "YYYY-MM-DD", time_format: false }
+      - { name: konu, label: "Konu", widget: string, hint: "Örn: CSO Yönetimi, Kentsel Taşkın, Mevzuat, İklim Değişikliği" }
+      - { name: linkedinUrl, label: "Orijinal LinkedIn Bağlantısı", widget: string, required: false }
+      - { name: tags, label: "Etiketler", widget: list, required: false }
+      - { name: featured, label: "Öne Çıkan", widget: boolean, default: false }
+      - { name: draft, label: "Taslak", widget: boolean, default: false }
+      - { name: body, label: "İçgörü Metni", widget: markdown, hint: "Kısa tutun — 1-2 paragraf idealdir" }
+
+  # ------------------------------------------------------------------
+  # TEKNİK KÜTÜPHANE
+  # ------------------------------------------------------------------
+  - name: kutuphane
+    label: "Teknik Kütüphane"
+    label_singular: "Kütüphane Kaydı"
+    folder: src/content/kutuphane
+    create: true
+    delete: true
+    slug: "{{slug}}"
+    preview_path: "teknik-kutuphane/{{slug}}"
+    sortable_fields: [title, pubDate]
+    fields:
+      - { name: title, label: "Başlık", widget: string }
+      - { name: description, label: "Özet", widget: text }
+      - { name: pubDate, label: "Yayın Tarihi", widget: datetime, format: "YYYY-MM-DD", time_format: false }
+      - { name: updatedDate, label: "Güncelleme Tarihi", widget: datetime, format: "YYYY-MM-DD", time_format: false, required: false }
+      - name: kategori
+        label: "Kategori"
+        widget: select
+        options:
+          - "Standart Özetleri"
+          - "Hesaplama Yöntemleri"
+          - "Tasarım Kriterleri"
+          - "Kirlilik Sınıflandırmaları"
+          - "Uluslararası Karşılaştırmalar"
+          - "Hidrolik Referanslar"
+          - "Kentsel Taşkın Kaynakları"
+      - { name: standartlar, label: "İlgili Standartlar", widget: list, required: false, hint: "Örn: DWA-M 153, EN 752" }
+      - { name: tags, label: "Etiketler", widget: list, required: false }
+      - { name: image, label: "Görsel / Diyagram", widget: image, required: false }
+      - { name: pdf, label: "İndirilebilir PDF", widget: file, required: false }
+      - { name: featured, label: "Öne Çıkan", widget: boolean, default: false }
+      - { name: draft, label: "Taslak", widget: boolean, default: false }
+      - { name: body, label: "İçerik", widget: markdown }
+
+  # ------------------------------------------------------------------
+  # ÜRÜNLER
+  # ------------------------------------------------------------------
+  - name: urunler
+    label: "Ürünler ve Çözümler"
+    label_singular: "Ürün"
+    folder: src/content/urunler
+    create: true
+    delete: true
+    slug: "{{slug}}"
+    preview_path: "urunler/{{slug}}"
+    sortable_fields: [title, order]
+    fields:
+      - { name: title, label: "Ürün Adı", widget: string }
+      - { name: description, label: "Kısa Açıklama", widget: text }
+      - name: kategori
+        label: "Kategori"
+        widget: select
+        options:
+          - "Yağmur Suyu Yönetimi"
+          - "Atıksu Sistemleri"
+          - "Drenaj Çözümleri"
+          - "Arıtma Teknolojileri"
+          - "Depolama Sistemleri"
+      - { name: image, label: "Ana Ürün Görseli", widget: image, required: false }
+      - { name: gallery, label: "Galeri", widget: list, required: false, field: { name: image, label: "Görsel", widget: image } }
+      - name: specs
+        label: "Teknik Özellikler"
+        widget: list
+        required: false
+        fields:
+          - { name: name, label: "Özellik", widget: string }
+          - { name: value, label: "Değer", widget: string }
+      - { name: applications, label: "Kullanım Alanları", widget: list, required: false }
+      - { name: benefits, label: "Faydalar", widget: list, required: false }
+      - { name: standartlar, label: "İlgili Standartlar", widget: list, required: false }
+      - { name: brochure, label: "Broşür (PDF)", widget: file, required: false }
+      - name: downloads
+        label: "Ek Dokümanlar"
+        widget: list
+        required: false
+        fields:
+          - { name: label, label: "Doküman Adı", widget: string }
+          - { name: file, label: "Dosya", widget: file }
+      - { name: featured, label: "Öne Çıkan", widget: boolean, default: false }
+      - { name: order, label: "Sıralama", widget: number, default: 99, value_type: int, hint: "Küçük sayı önce gösterilir" }
+      - { name: draft, label: "Taslak", widget: boolean, default: false }
+      - { name: body, label: "Detaylı Açıklama", widget: markdown }
+
+  # ------------------------------------------------------------------
+  # GRAFİKLER (JSON verisi)
+  # ------------------------------------------------------------------
+  - name: grafikler
+    label: "Grafikler"
+    label_singular: "Grafik"
+    folder: src/data/charts
+    create: true
+    delete: true
+    extension: json
+    format: json
+    slug: "{{slug}}"
+    fields:
+      - { name: title, label: "Grafik Başlığı", widget: string }
+      - name: type
+        label: "Grafik Türü"
+        widget: select
+        options:
+          - { label: "Çizgi (line)", value: line }
+          - { label: "Sütun (bar)", value: bar }
+          - { label: "Pasta (pie)", value: pie }
+          - { label: "Halka (doughnut)", value: doughnut }
+          - { label: "Radar", value: radar }
+      - { name: description, label: "Açıklama", widget: string, required: false }
+      - { name: source, label: "Veri Kaynağı", widget: string, required: false }
+      - { name: labels, label: "Eksen Etiketleri (kategoriler)", widget: list }
+      - name: datasets
+        label: "Veri Serileri"
+        widget: list
+        fields:
+          - { name: label, label: "Seri Adı", widget: string }
+          - { name: data, label: "Değerler", widget: list, hint: "Sayıları virgülle ayırın — etiket sayısıyla aynı adette olmalı" }
+      - { name: yAxisLabel, label: "Y Ekseni Başlığı", widget: string, required: false }
+      - { name: xAxisLabel, label: "X Ekseni Başlığı", widget: string, required: false }
+
+  # ------------------------------------------------------------------
+  # SİTE AYARLARI (tek dosyalar)
+  # ------------------------------------------------------------------
+  - name: ayarlar
+    label: "Site Ayarları"
+    files:
+      - name: site
+        label: "Genel Bilgiler ve Biyografi"
+        file: src/data/site.json
+        fields:
+          - { name: siteName, label: "Site Adı", widget: string }
+          - { name: siteTitle, label: "Site Başlığı (SEO)", widget: string }
+          - { name: tagline, label: "Slogan", widget: string }
+          - { name: description, label: "Site Açıklaması (SEO)", widget: text }
+          - name: author
+            label: "Yazar Bilgileri"
+            widget: object
+            fields:
+              - { name: name, label: "Ad Soyad", widget: string }
+              - { name: title, label: "Unvan", widget: string }
+              - { name: shortBio, label: "Kısa Biyografi", widget: text }
+              - { name: linkedin, label: "LinkedIn Adresi", widget: string }
+              - { name: email, label: "E-posta", widget: string }
+              - { name: phone, label: "Telefon", widget: string }
+              - { name: photo, label: "Fotoğraf", widget: image, required: false }
+          - { name: expertise, label: "Uzmanlık Alanları", widget: list }
+          - name: organization
+            label: "Kurum"
+            widget: object
+            fields:
+              - { name: name, label: "Kurum Adı", widget: string }
+              - { name: role, label: "Görev", widget: string }
+      - name: timeline
+        label: "Kariyer ve Eğitim Zaman Çizelgesi"
+        file: src/data/timeline.json
+        fields:
+          - name: career
+            label: "Kariyer"
+            widget: list
+            fields:
+              - { name: period, label: "Dönem", widget: string }
+              - { name: role, label: "Görev / Unvan", widget: string }
+              - { name: org, label: "Kurum", widget: string }
+              - { name: description, label: "Açıklama", widget: text, required: false }
+          - name: education
+            label: "Eğitim"
+            widget: list
+            fields:
+              - { name: period, label: "Dönem", widget: string }
+              - { name: role, label: "Derece / Bölüm", widget: string }
+              - { name: org, label: "Okul", widget: string }
+              - { name: description, label: "Açıklama", widget: text, required: false }

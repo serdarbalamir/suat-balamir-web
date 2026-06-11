@@ -1,0 +1,176 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import AuthorBox from '../../components/AuthorBox.astro';
+import ShareButtons from '../../components/ShareButtons.astro';
+import ChartHydrator from '../../components/ChartHydrator.astro';
+import ArticleCard from '../../components/ArticleCard.astro';
+import { readingTime, formatDate } from '../../lib/utils';
+import site from '../../data/site.json';
+
+export async function getStaticPaths() {
+  const articles = await getCollection('makaleler', ({ data }) => !data.draft);
+  return articles.map((article) => ({
+    params: { slug: article.id },
+    props: { article },
+  }));
+}
+
+const { article } = Astro.props;
+const { Content } = await render(article);
+const d = article.data;
+const mins = readingTime(article.body ?? '');
+
+// İlgili makaleler: aynı kategori veya ortak etiket
+const all = await getCollection('makaleler', ({ data }) => !data.draft);
+const related = all
+  .filter((a) => a.id !== article.id)
+  .map((a) => ({
+    a,
+    score:
+      (a.data.kategori === d.kategori ? 2 : 0) +
+      a.data.tags.filter((t) => d.tags.includes(t)).length,
+  }))
+  .filter((x) => x.score > 0)
+  .sort((x, y) => y.score - x.score)
+  .slice(0, 3)
+  .map((x) => x.a);
+
+// TechArticle şeması
+const articleSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'TechArticle',
+  headline: d.title,
+  description: d.description,
+  datePublished: (d.ilkYayinTarihi ?? d.pubDate).toISOString(),
+  dateModified: (d.updatedDate ?? d.pubDate).toISOString(),
+  inLanguage: 'tr',
+  author: {
+    '@type': 'Person',
+    name: site.author.name,
+    jobTitle: site.author.title,
+    url: new URL('/hakkinda', Astro.site).href,
+  },
+  ...(d.image ? { image: new URL(d.image, Astro.site).href } : {}),
+  keywords: d.tags.join(', '),
+  articleSection: d.kategori,
+  mainEntityOfPage: new URL(Astro.url.pathname, Astro.site).href,
+};
+
+const breadcrumbSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Ana Sayfa', item: Astro.site?.href },
+    { '@type': 'ListItem', position: 2, name: 'Makaleler', item: new URL('/makaleler', Astro.site).href },
+    { '@type': 'ListItem', position: 3, name: d.title },
+  ],
+};
+---
+
+<BaseLayout
+  title={d.title}
+  description={d.description}
+  ogType="article"
+  ogImage={d.image}
+  schema={[articleSchema, breadcrumbSchema]}
+>
+  <article>
+    <header class="article-header">
+      <div class="container" style="max-width:var(--max-width);">
+        <nav class="breadcrumb" style="color:var(--gray-500);" aria-label="breadcrumb">
+          <a href="/" style="color:var(--gray-500);">Ana Sayfa</a> <span>/</span>
+          <a href="/makaleler" style="color:var(--gray-500);">Makaleler</a> <span>/</span>
+          <span>{d.kategori}</span>
+        </nav>
+        <h1 style="font-size:clamp(1.6rem,3.2vw,2.3rem);max-width:860px;">{d.title}</h1>
+        <div class="article-meta-top">
+          <span class="cat">{d.kategori}</span>
+          <span>{formatDate(d.pubDate)}</span>
+          <span>·</span>
+          <span>{mins} dk okuma</span>
+          {d.updatedDate && <span>· Güncelleme: {formatDate(d.updatedDate)}</span>}
+        </div>
+        {d.ilkYayinKaynagi && (
+          <p class="first-pub-note">
+            İlk olarak{' '}
+            {d.ilkYayinUrl ? (
+              <a href={d.ilkYayinUrl} target="_blank" rel="noopener">{d.ilkYayinKaynagi}</a>
+            ) : (
+              <strong>{d.ilkYayinKaynagi}</strong>
+            )}
+            {d.ilkYayinTarihi && <> ({formatDate(d.ilkYayinTarihi)})</>}{' '}
+            kaynağında yayınlanmıştır.
+          </p>
+        )}
+      </div>
+    </header>
+
+    <div class="container article-layout">
+      <div>
+        {d.image && (
+          <img
+            src={d.image}
+            alt={d.imageAlt ?? d.title}
+            style="border-radius:8px;border:1px solid var(--gray-200);margin-bottom:32px;"
+          />
+        )}
+        <div class="prose">
+          <Content />
+        </div>
+
+        {d.tags.length > 0 && (
+          <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:32px;">
+            {d.tags.map((t) => <span class="tag">{t}</span>)}
+          </div>
+        )}
+
+        <ShareButtons title={d.title} />
+      </div>
+
+      <aside class="sidebar">
+        <AuthorBox />
+        {d.pdf && (
+          <div class="sidebar-box">
+            <h4>İndirilebilir Doküman</h4>
+            <a href={d.pdf} class="btn btn-primary" style="width:100%;justify-content:center;" download>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3" />
+              </svg>
+              PDF olarak indir
+            </a>
+          </div>
+        )}
+        <div class="sidebar-box">
+          <h4>Kategori</h4>
+          <ul>
+            <li><a href="/makaleler">{d.kategori}</a></li>
+          </ul>
+          {d.tags.length > 0 && (
+            <>
+              <h4 style="margin-top:18px;">Etiketler</h4>
+              <div style="display:flex;flex-wrap:wrap;gap:6px;">
+                {d.tags.map((t) => <span class="tag">{t}</span>)}
+              </div>
+            </>
+          )}
+        </div>
+      </aside>
+    </div>
+
+    {related.length > 0 && (
+      <section class="section alt">
+        <div class="container">
+          <div class="section-head">
+            <h2>İlgili Makaleler</h2>
+          </div>
+          <div class="grid grid-3">
+            {related.map((a) => <ArticleCard article={a} showImage={false} />)}
+          </div>
+        </div>
+      </section>
+    )}
+  </article>
+
+  <ChartHydrator />
+</BaseLayout>

@@ -1,0 +1,18 @@
+{
+  "title": "DWA-M 153'e Göre Yüzey Tipi Bazında Kirlenme Sınıfı Dağılımı",
+  "type": "doughnut",
+  "description": "Tipik bir karma kullanımlı kentsel havzada yüzey kirlenme sınıflarının alansal dağılımı (örnek havza).",
+  "source": "DWA-M 153 sınıflandırma esas alınarak hazırlanmış örnek hesap",
+  "labels": [
+    "Sınıf I — Az kirli (çatılar, yaya alanları)",
+    "Sınıf II — Orta kirli (konut yolları, otoparklar)",
+    "Sınıf III — Kirli (ana arterler, ticari alanlar)",
+    "Sınıf IV — Çok kirli (endüstriyel sahalar)"
+  ],
+  "datasets": [
+    {
+      "label": "Alan payı (%)",
+      "data": [38, 34, 21, 7]
+    }
+  ]
+}

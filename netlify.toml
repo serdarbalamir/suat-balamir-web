@@ -1,0 +1,14 @@
+# Netlify yapılandırması — Suat Balamir Teknik Yayın Platformu
+
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "22"
+
+# /admin kısayolu (statik dosyaya yönlendirme)
+[[redirects]]
+  from = "/admin"
+  to = "/admin/index.html"
+  status = 200

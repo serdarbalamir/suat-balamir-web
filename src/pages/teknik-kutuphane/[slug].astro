@@ -1,0 +1,130 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import AuthorBox from '../../components/AuthorBox.astro';
+import ShareButtons from '../../components/ShareButtons.astro';
+import ChartHydrator from '../../components/ChartHydrator.astro';
+import LibraryCard from '../../components/LibraryCard.astro';
+import { formatDate } from '../../lib/utils';
+import site from '../../data/site.json';
+
+export async function getStaticPaths() {
+  const entries = await getCollection('kutuphane', ({ data }) => !data.draft);
+  return entries.map((entry) => ({
+    params: { slug: entry.id },
+    props: { entry },
+  }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+const d = entry.data;
+
+const all = await getCollection('kutuphane', ({ data }) => !data.draft);
+const related = all
+  .filter((e) => e.id !== entry.id)
+  .map((e) => ({
+    e,
+    score:
+      (e.data.kategori === d.kategori ? 2 : 0) +
+      e.data.standartlar.filter((s) => d.standartlar.includes(s)).length * 2 +
+      e.data.tags.filter((t) => d.tags.includes(t)).length,
+  }))
+  .filter((x) => x.score > 0)
+  .sort((x, y) => y.score - x.score)
+  .slice(0, 3)
+  .map((x) => x.e);
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'TechArticle',
+  headline: d.title,
+  description: d.description,
+  datePublished: d.pubDate.toISOString(),
+  dateModified: (d.updatedDate ?? d.pubDate).toISOString(),
+  inLanguage: 'tr',
+  author: { '@type': 'Person', name: site.author.name },
+  keywords: [...d.standartlar, ...d.tags].join(', '),
+  articleSection: d.kategori,
+};
+---
+
+<BaseLayout title={d.title} description={d.description} ogType="article" schema={schema}>
+  <article>
+    <header class="article-header">
+      <div class="container" style="max-width:var(--max-width);">
+        <nav class="breadcrumb" style="color:var(--gray-500);" aria-label="breadcrumb">
+          <a href="/" style="color:var(--gray-500);">Ana Sayfa</a> <span>/</span>
+          <a href="/teknik-kutuphane" style="color:var(--gray-500);">Teknik Kütüphane</a> <span>/</span>
+          <span>{d.kategori}</span>
+        </nav>
+        <h1 style="font-size:clamp(1.6rem,3.2vw,2.3rem);max-width:860px;">{d.title}</h1>
+        <div class="article-meta-top">
+          <span class="cat">{d.kategori}</span>
+          <span>{formatDate(d.pubDate)}</span>
+          {d.updatedDate && <span>· Güncelleme: {formatDate(d.updatedDate)}</span>}
+        </div>
+        {d.standartlar.length > 0 && (
+          <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:14px;">
+            {d.standartlar.map((s) => <span class="badge-standard">{s}</span>)}
+          </div>
+        )}
+      </div>
+    </header>
+
+    <div class="container article-layout">
+      <div>
+        {d.image && (
+          <img src={d.image} alt={d.title} style="border-radius:8px;border:1px solid var(--gray-200);margin-bottom:32px;" />
+        )}
+        <div class="prose">
+          <Content />
+        </div>
+        {d.tags.length > 0 && (
+          <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:32px;">
+            {d.tags.map((t) => <span class="tag">{t}</span>)}
+          </div>
+        )}
+        <ShareButtons title={d.title} />
+      </div>
+
+      <aside class="sidebar">
+        {d.pdf && (
+          <div class="sidebar-box">
+            <h4>İndirilebilir Doküman</h4>
+            <a href={d.pdf} class="btn btn-primary" style="width:100%;justify-content:center;" download>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3" />
+              </svg>
+              PDF olarak indir
+            </a>
+          </div>
+        )}
+        {d.standartlar.length > 0 && (
+          <div class="sidebar-box">
+            <h4>İlgili Standartlar</h4>
+            <div style="display:flex;flex-wrap:wrap;gap:8px;">
+              {d.standartlar.map((s) => <span class="badge-standard">{s}</span>)}
+            </div>
+          </div>
+        )}
+        <AuthorBox />
+      </aside>
+    </div>
+
+    {related.length > 0 && (
+      <section class="section alt">
+        <div class="container">
+          <div class="section-head">
+            <h2>İlgili Kaynaklar</h2>
+          </div>
+          <div class="grid grid-3">
+            {related.map((e) => <LibraryCard entry={e} />)}
+          </div>
+        </div>
+      </section>
+    )}
+  </article>
+
+  <ChartHydrator />
+</BaseLayout>

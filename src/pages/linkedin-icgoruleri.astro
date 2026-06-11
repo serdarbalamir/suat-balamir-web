@@ -1,0 +1,61 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import InsightCard from '../components/InsightCard.astro';
+import FilterToolbar from '../components/FilterToolbar.astro';
+import site from '../data/site.json';
+
+const insights = (await getCollection('icgoruler', ({ data }) => !data.draft)).sort(
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+);
+
+const topics = [...new Set(insights.map((i) => i.data.konu))];
+
+const renderedInsights = await Promise.all(
+  insights.map(async (i) => ({ insight: i, Content: (await render(i)).Content }))
+);
+---
+
+<BaseLayout
+  title="LinkedIn İçgörüleri"
+  description="Su sektörü, altyapı yatırımları, mevzuat gelişmeleri ve kentsel taşkın yönetimi üzerine kısa değerlendirme ve gözlemler."
+>
+  <div class="page-header">
+    <div class="container">
+      <nav class="breadcrumb" aria-label="breadcrumb">
+        <a href="/">Ana Sayfa</a> <span>/</span> <span>LinkedIn İçgörüleri</span>
+      </nav>
+      <h1>LinkedIn İçgörüleri</h1>
+      <p>
+        LinkedIn paylaşımlarından derlenen kısa formlu değerlendirmeler: sektörel gözlemler,
+        altyapı trendleri, mevzuat güncellemeleri ve su sektörü gündemine ilişkin teknik yorumlar.
+      </p>
+      <a
+        href={site.author.linkedin}
+        target="_blank"
+        rel="noopener"
+        class="btn btn-light"
+        style="margin-top:20px;"
+      >
+        LinkedIn'de Takip Et
+      </a>
+    </div>
+  </div>
+
+  <section class="section">
+    <div class="container">
+      <FilterToolbar
+        categories={topics}
+        searchPlaceholder="İçgörülerde ara..."
+        attr="data-konu"
+      />
+      <div class="grid grid-3">
+        {renderedInsights.map(({ insight, Content }) => (
+          <InsightCard insight={insight}>
+            <Content />
+          </InsightCard>
+        ))}
+      </div>
+    </div>
+  </section>
+</BaseLayout>

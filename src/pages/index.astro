@@ -1,0 +1,142 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ArticleCard from '../components/ArticleCard.astro';
+import InsightCard from '../components/InsightCard.astro';
+import LibraryCard from '../components/LibraryCard.astro';
+import ProductCard from '../components/ProductCard.astro';
+import site from '../data/site.json';
+
+const articles = (await getCollection('makaleler', ({ data }) => !data.draft)).sort(
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+);
+const featuredArticles = articles.filter((a) => a.data.featured).slice(0, 3);
+const latestArticles = articles.slice(0, 3);
+
+const insights = (await getCollection('icgoruler', ({ data }) => !data.draft))
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+  .slice(0, 3);
+
+const library = (await getCollection('kutuphane', ({ data }) => !data.draft))
+  .sort(
+    (a, b) =>
+      Number(b.data.featured) - Number(a.data.featured) ||
+      b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+  )
+  .slice(0, 3);
+
+const products = (await getCollection('urunler', ({ data }) => !data.draft))
+  .sort(
+    (a, b) =>
+      Number(b.data.featured) - Number(a.data.featured) || a.data.order - b.data.order
+  )
+  .slice(0, 3);
+
+const renderedInsights = await Promise.all(
+  insights.map(async (i) => ({ insight: i, Content: (await render(i)).Content }))
+);
+---
+
+<BaseLayout>
+  <!-- Hero -->
+  <section class="hero">
+    <div class="container">
+      <div>
+        <h1>Su, Atıksu ve Yağmur Suyu Yönetimi Üzerine Teknik Yayınlar</h1>
+        <p class="lead">{site.author.shortBio}</p>
+        <div class="hero-actions">
+          <a href="/makaleler" class="btn btn-primary">Makaleleri Oku</a>
+          <a href="/teknik-kutuphane" class="btn btn-light">Teknik Kütüphane</a>
+          <a href="/urunler" class="btn btn-light">Ürünleri İncele</a>
+          <a href="/iletisim" class="btn btn-light">İletişime Geç</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Uzmanlık şeridi — kayan bant -->
+  <div class="expertise-strip" aria-label="Uzmanlık alanları">
+    <div class="marquee-track">
+      {[...site.expertise, ...site.expertise].map((e) => <span>{e}</span>)}
+    </div>
+  </div>
+
+  <!-- Öne çıkan makaleler -->
+  <section class="section">
+    <div class="container">
+      <div class="section-head">
+        <div>
+          <h2>Öne Çıkan Makaleler</h2>
+          <p class="sub">Su ve Çevre Teknolojileri Dergisi'nde ve diğer mecralarda yayınlanan teknik makaleler</p>
+        </div>
+        <a href="/makaleler" class="more">Tüm makaleler →</a>
+      </div>
+      <div class="grid grid-3">
+        {(featuredArticles.length > 0 ? featuredArticles : latestArticles).map((a) => (
+          <ArticleCard article={a} />
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Teknik kütüphane -->
+  <section class="section alt">
+    <div class="container">
+      <div class="section-head">
+        <div>
+          <h2>Teknik Kütüphane</h2>
+          <p class="sub">DWA standartları, hesaplama yöntemleri, tasarım kriterleri ve mühendislik referansları</p>
+        </div>
+        <a href="/teknik-kutuphane" class="more">Kütüphaneye git →</a>
+      </div>
+      <div class="grid grid-3">
+        {library.map((e) => <LibraryCard entry={e} />)}
+      </div>
+    </div>
+  </section>
+
+  <!-- Son içgörüler -->
+  <section class="section">
+    <div class="container">
+      <div class="section-head">
+        <div>
+          <h2>Güncel İçgörüler</h2>
+          <p class="sub">LinkedIn paylaşımlarından derlenen sektörel gözlem ve değerlendirmeler</p>
+        </div>
+        <a href="/linkedin-icgoruleri" class="more">Tüm içgörüler →</a>
+      </div>
+      <div class="grid grid-3">
+        {renderedInsights.map(({ insight, Content }) => (
+          <InsightCard insight={insight}>
+            <Content />
+          </InsightCard>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Ürünler -->
+  <section class="section alt">
+    <div class="container">
+      <div class="section-head">
+        <div>
+          <h2>Ürünler ve Çözümler</h2>
+          <p class="sub">Yağmur suyu, atıksu ve drenaj altyapısına yönelik mühendislik çözümleri</p>
+        </div>
+        <a href="/urunler" class="more">Tüm ürünler →</a>
+      </div>
+      <div class="grid grid-3">
+        {products.map((p) => <ProductCard product={p} />)}
+      </div>
+    </div>
+  </section>
+
+  <!-- İletişim CTA -->
+  <section class="cta-band">
+    <div class="container">
+      <h2>Teknik Danışmanlık ve İş Birliği</h2>
+      <p>Teknik danışmanlık, ürün bilgisi veya iş birliği talepleriniz için iletişime geçebilirsiniz.</p>
+      <a href="/iletisim" class="btn btn-light">İletişime Geç</a>
+    </div>
+  </section>
+</BaseLayout>

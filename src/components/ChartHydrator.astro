@@ -1,0 +1,118 @@
+---
+/**
+ * Grafik hidratörü — sayfadaki tüm `<div data-chart="grafik-id"></div>`
+ * yer tutucularını Chart.js grafikleriyle doldurur.
+ *
+ * Grafik verileri src/data/charts/*.json dosyalarından gelir ve
+ * Decap CMS üzerindeki "Grafikler" koleksiyonundan düzenlenebilir.
+ */
+import { getCollection } from 'astro:content';
+
+const charts = await getCollection('grafikler');
+const chartMap = Object.fromEntries(charts.map((c) => [c.id, c.data]));
+---
+
+<script type="application/json" id="charts-data" set:html={JSON.stringify(chartMap)} />
+
+<script>
+  import {
+    Chart,
+    LineController, LineElement, PointElement,
+    BarController, BarElement,
+    PieController, DoughnutController, ArcElement,
+    RadarController, RadialLinearScale,
+    CategoryScale, LinearScale,
+    Legend, Tooltip, Filler,
+  } from 'chart.js';
+
+  Chart.register(
+    LineController, LineElement, PointElement,
+    BarController, BarElement,
+    PieController, DoughnutController, ArcElement,
+    RadarController, RadialLinearScale,
+    CategoryScale, LinearScale,
+    Legend, Tooltip, Filler
+  );
+
+  // Kurumsal palet: lacivert / su mavisi tonları
+  const PALETTE = ['#14375e', '#1b6ca8', '#4a9cd4', '#67748a', '#9bc4e2', '#0a1f38', '#2580bf'];
+
+  const dataEl = document.getElementById('charts-data');
+  const chartMap = dataEl ? JSON.parse(dataEl.textContent || '{}') : {};
+
+  document.querySelectorAll('[data-chart]').forEach((placeholder, i) => {
+    const id = placeholder.getAttribute('data-chart');
+    const def = id ? chartMap[id] : null;
+    if (!def) {
+      console.warn(`Grafik bulunamadı: ${id}`);
+      return;
+    }
+
+    const isPieLike = ['pie', 'doughnut'].includes(def.type);
+
+    // Blok yapısını oluştur
+    const block = document.createElement('figure');
+    block.className = 'chart-block';
+    block.innerHTML = `
+      <div class="chart-title"></div>
+      ${def.description ? '<div class="chart-desc"></div>' : ''}
+      <div style="position:relative;min-height:280px;"><canvas></canvas></div>
+      ${def.source ? '<div class="chart-source"></div>' : ''}
+    `;
+    block.querySelector('.chart-title').textContent = def.title;
+    if (def.description) block.querySelector('.chart-desc').textContent = def.description;
+    if (def.source) block.querySelector('.chart-source').textContent = `Kaynak: ${def.source}`;
+    placeholder.replaceWith(block);
+
+    const datasets = def.datasets.map((ds, di) => ({
+      label: ds.label,
+      data: ds.data,
+      backgroundColor: isPieLike
+        ? def.labels.map((_, li) => PALETTE[li % PALETTE.length])
+        : def.type === 'line'
+          ? PALETTE[di % PALETTE.length] + '22'
+          : PALETTE[di % PALETTE.length],
+      borderColor: PALETTE[di % PALETTE.length],
+      borderWidth: def.type === 'line' ? 2.5 : 1,
+      fill: def.type === 'line',
+      tension: 0.3,
+      pointRadius: 3,
+    }));
+
+    new Chart(block.querySelector('canvas'), {
+      type: def.type,
+      data: { labels: def.labels, datasets },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            display: isPieLike || def.datasets.length > 1,
+            position: 'bottom',
+            labels: { font: { family: 'Inter Variable, sans-serif', size: 12 }, boxWidth: 14 },
+          },
+          tooltip: { backgroundColor: '#0a1f38', titleFont: { size: 13 }, bodyFont: { size: 12 } },
+        },
+        scales: isPieLike || def.type === 'radar'
+          ? {}
+          : {
+              y: {
+                beginAtZero: true,
+                title: def.yAxisLabel
+                  ? { display: true, text: def.yAxisLabel, font: { size: 12, weight: '600' } }
+                  : undefined,
+                grid: { color: '#eef1f5' },
+                ticks: { font: { size: 11 } },
+              },
+              x: {
+                title: def.xAxisLabel
+                  ? { display: true, text: def.xAxisLabel, font: { size: 12, weight: '600' } }
+                  : undefined,
+                grid: { display: false },
+                ticks: { font: { size: 11 } },
+              },
+            },
+      },
+    });
+  });
+</script>

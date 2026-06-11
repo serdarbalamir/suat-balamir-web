@@ -1,0 +1,47 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const articles = (await getCollection('makaleler', ({ data }) => !data.draft))
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+  .slice(0, 3);
+---
+
+<BaseLayout title="Sayfa Bulunamadı" noindex={true}>
+  <div class="page-header">
+    <div class="container">
+      <h1>404 — Sayfa Bulunamadı</h1>
+      <p>
+        Aradığınız sayfa taşınmış, adı değişmiş veya hiç var olmamış olabilir.
+        Aşağıdaki bağlantılardan devam edebilirsiniz.
+      </p>
+    </div>
+  </div>
+
+  <section class="section">
+    <div class="container">
+      <div style="display:flex;flex-wrap:wrap;gap:12px;margin-bottom:48px;">
+        <a href="/" class="btn btn-primary">Ana Sayfa</a>
+        <a href="/makaleler" class="btn btn-outline">Makaleler</a>
+        <a href="/teknik-kutuphane" class="btn btn-outline">Teknik Kütüphane</a>
+        <a href="/urunler" class="btn btn-outline">Ürünler</a>
+        <a href="/iletisim" class="btn btn-outline">İletişim</a>
+      </div>
+
+      <div class="section-head">
+        <h2>Son Makaleler</h2>
+      </div>
+      <div class="grid grid-3">
+        {articles.map((a) => (
+          <article class="card">
+            <div class="card-body">
+              <span class="card-cat">{a.data.kategori}</span>
+              <h3><a href={`/makaleler/${a.id}`}>{a.data.title}</a></h3>
+              <p>{a.data.description}</p>
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+</BaseLayout>

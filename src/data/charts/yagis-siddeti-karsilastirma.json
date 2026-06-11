@@ -1,0 +1,15 @@
+{
+  "title": "Tasarım Yağış Şiddeti Karşılaştırması (15 dk, T=5 yıl)",
+  "type": "bar",
+  "description": "Seçilmiş şehirler için 15 dakikalık, 5 yıl tekrarlama periyotlu tasarım yağış şiddetleri (örnek değerler).",
+  "source": "Ulusal meteoroloji idareleri ve yerel tasarım kılavuzları (temsili değerler)",
+  "labels": ["İstanbul", "Ankara", "Oslo", "Stockholm", "Kopenhag", "Berlin"],
+  "datasets": [
+    {
+      "label": "Yağış şiddeti (l/s·ha)",
+      "data": [220, 160, 130, 120, 140, 170]
+    }
+  ],
+  "yAxisLabel": "Yağış şiddeti (l/s·ha)",
+  "xAxisLabel": "Şehir"
+}

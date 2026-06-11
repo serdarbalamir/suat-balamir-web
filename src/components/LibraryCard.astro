@@ -1,0 +1,38 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { formatDate } from '../lib/utils';
+
+interface Props {
+  entry: CollectionEntry<'kutuphane'>;
+}
+
+const { entry } = Astro.props;
+const { title, description, pubDate, kategori, standartlar, pdf } = entry.data;
+const url = `/teknik-kutuphane/${entry.id}`;
+---
+
+<article
+  class="card"
+  data-kategori={kategori}
+  data-search={`${title} ${description} ${standartlar.join(' ')} ${entry.data.tags.join(' ')}`.toLocaleLowerCase('tr')}
+>
+  <div class="card-body">
+    <span class="card-cat">{kategori}</span>
+    <h3><a href={url}>{title}</a></h3>
+    <p>{description}</p>
+    {standartlar.length > 0 && (
+      <div style="display:flex;flex-wrap:wrap;gap:6px;">
+        {standartlar.map((s) => <span class="badge-standard">{s}</span>)}
+      </div>
+    )}
+    <div class="card-meta">
+      <span>{formatDate(pubDate)}</span>
+      {pdf && (
+        <>
+          <span>·</span>
+          <span style="color:var(--water-600);font-weight:600;">PDF mevcut</span>
+        </>
+      )}
+    </div>
+  </div>
+</article>

@@ -1,0 +1,48 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ArticleCard from '../../components/ArticleCard.astro';
+import FilterToolbar from '../../components/FilterToolbar.astro';
+import { MAKALE_KATEGORILERI } from '../../content.config';
+
+const articles = (await getCollection('makaleler', ({ data }) => !data.draft)).sort(
+  (a, b) =>
+    Number(b.data.featured) - Number(a.data.featured) ||
+    b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+);
+
+// Yalnızca içerikte kullanılan kategorileri filtre olarak göster
+const usedCategories = MAKALE_KATEGORILERI.filter((c) =>
+  articles.some((a) => a.data.kategori === c)
+);
+---
+
+<BaseLayout
+  title="Makaleler"
+  description="Yağmur suyu yönetimi, kanalizasyon sistemleri, DWA standartları, CSO yönetimi ve kentsel drenaj üzerine teknik makaleler."
+>
+  <div class="page-header">
+    <div class="container">
+      <nav class="breadcrumb" aria-label="breadcrumb">
+        <a href="/">Ana Sayfa</a> <span>/</span> <span>Makaleler</span>
+      </nav>
+      <h1>Makaleler</h1>
+      <p>
+        Su, atıksu ve yağmur suyu yönetimi alanında yayınlanmış teknik makaleler.
+        Dergi yazıları, standart incelemeleri ve mühendislik değerlendirmeleri.
+      </p>
+    </div>
+  </div>
+
+  <section class="section">
+    <div class="container">
+      <FilterToolbar
+        categories={usedCategories}
+        searchPlaceholder="Makale başlığı, konu veya etiket ara..."
+      />
+      <div class="grid grid-3">
+        {articles.map((a) => <ArticleCard article={a} />)}
+      </div>
+    </div>
+  </section>
+</BaseLayout>

@@ -1,0 +1,42 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { readingTime, formatDate } from '../lib/utils';
+
+interface Props {
+  article: CollectionEntry<'makaleler'>;
+  showImage?: boolean;
+}
+
+const { article, showImage = true } = Astro.props;
+const { title, description, pubDate, kategori, image, imageAlt, featured } = article.data;
+const mins = readingTime(article.body ?? '');
+const url = `/makaleler/${article.id}`;
+---
+
+<article class="card" data-kategori={kategori} data-search={`${title} ${description} ${article.data.tags.join(' ')}`.toLocaleLowerCase('tr')}>
+  {showImage && (
+    <a href={url} class="card-img" aria-hidden="true" tabindex="-1">
+      {image ? (
+        <img src={image} alt={imageAlt ?? title} loading="lazy" />
+      ) : (
+        <svg width="54" height="54" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4">
+          <path d="M12 2.7c3.5 4.4 6.3 7.8 6.3 11.3a6.3 6.3 0 0 1-12.6 0C5.7 10.5 8.5 7.1 12 2.7Z" />
+          <path d="M9.5 14a2.5 2.5 0 0 0 2.5 2.5" stroke-linecap="round" />
+        </svg>
+      )}
+    </a>
+  )}
+  <div class="card-body">
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;">
+      <span class="card-cat">{kategori}</span>
+      {featured && <span class="featured-star">★ Öne Çıkan</span>}
+    </div>
+    <h3><a href={url}>{title}</a></h3>
+    <p>{description}</p>
+    <div class="card-meta">
+      <span>{formatDate(pubDate)}</span>
+      <span>·</span>
+      <span>{mins} dk okuma</span>
+    </div>
+  </div>
+</article>

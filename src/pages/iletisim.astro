@@ -1,0 +1,126 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import site from '../data/site.json';
+---
+
+<BaseLayout
+  title="İletişim"
+  description="Teknik danışmanlık, ürün bilgisi veya iş birliği talepleriniz için Suat Balamir ile iletişime geçin."
+>
+  <div class="page-header">
+    <div class="container">
+      <nav class="breadcrumb" aria-label="breadcrumb">
+        <a href="/">Ana Sayfa</a> <span>/</span> <span>İletişim</span>
+      </nav>
+      <h1>İletişim</h1>
+      <p>Teknik danışmanlık, ürün bilgisi veya iş birliği talepleriniz için iletişime geçebilirsiniz.</p>
+    </div>
+  </div>
+
+  <section class="section">
+    <div class="container" style="display:grid;grid-template-columns:minmax(0,1.4fr) 1fr;gap:56px;align-items:start;">
+      <div>
+        <h2 style="font-size:1.3rem;margin-bottom:8px;">Danışmanlık ve Bilgi Talebi Formu</h2>
+        <p style="color:var(--gray-500);font-size:0.95rem;margin-bottom:28px;">
+          Formu doldurduğunuzda talebiniz e-posta ile iletilir. En kısa sürede dönüş yapılacaktır.
+        </p>
+        <!--
+          Form altyapısı: Netlify'da barındırılırsa data-netlify="true" özniteliği
+          formu otomatik çalışır hâle getirir. Farklı bir sağlayıcı için
+          (Formspree vb.) action adresini güncelleyin.
+        -->
+        <form class="form-grid" name="iletisim" method="POST" data-netlify="true" netlify-honeypot="bot-field">
+          <input type="hidden" name="form-name" value="iletisim" />
+          <p style="display:none;"><label>Doldurmayınız: <input name="bot-field" /></label></p>
+          <div class="form-row">
+            <div class="form-field">
+              <label for="ad">Ad Soyad *</label>
+              <input type="text" id="ad" name="ad" required />
+            </div>
+            <div class="form-field">
+              <label for="kurum">Kurum / Firma</label>
+              <input type="text" id="kurum" name="kurum" />
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-field">
+              <label for="email">E-posta *</label>
+              <input type="email" id="email" name="email" required />
+            </div>
+            <div class="form-field">
+              <label for="telefon">Telefon</label>
+              <input type="tel" id="telefon" name="telefon" />
+            </div>
+          </div>
+          <div class="form-field">
+            <label for="konu">Talep Konusu *</label>
+            <select id="konu" name="konu" required>
+              <option value="">Seçiniz...</option>
+              <option>Teknik Danışmanlık</option>
+              <option>Ürün Bilgisi / Teklif</option>
+              <option>İş Birliği</option>
+              <option>Yayın / Konuşma Daveti</option>
+              <option>Diğer</option>
+            </select>
+          </div>
+          <div class="form-field">
+            <label for="mesaj">Mesajınız *</label>
+            <textarea id="mesaj" name="mesaj" required placeholder="Projeniz, ürün talebiniz veya danışmanlık ihtiyacınız hakkında kısa bilgi veriniz..."></textarea>
+          </div>
+          <div>
+            <button type="submit" class="btn btn-primary">Talebi Gönder</button>
+          </div>
+        </form>
+      </div>
+
+      <aside class="sidebar">
+        <div class="sidebar-box">
+          <h4>İletişim Bilgileri</h4>
+          <ul>
+            <li>
+              <strong style="display:block;color:var(--navy-800);font-size:0.8rem;">E-posta</strong>
+              <a href={`mailto:${site.author.email}`}>{site.author.email}</a>
+            </li>
+            <li style="margin-top:14px;">
+              <strong style="display:block;color:var(--navy-800);font-size:0.8rem;">Telefon</strong>
+              <span style="color:var(--gray-500);">{site.author.phone}</span>
+            </li>
+            <li style="margin-top:14px;">
+              <strong style="display:block;color:var(--navy-800);font-size:0.8rem;">Kurum</strong>
+              <span style="color:var(--gray-500);">{site.organization.name} — {site.organization.role}</span>
+            </li>
+          </ul>
+        </div>
+        <div class="sidebar-box">
+          <h4>LinkedIn</h4>
+          <p style="font-size:0.88rem;color:var(--gray-700);margin-bottom:14px;">
+            Güncel paylaşımlar ve sektörel değerlendirmeler için LinkedIn üzerinden takip edebilirsiniz.
+          </p>
+          <a href={site.author.linkedin} target="_blank" rel="noopener" class="btn btn-dark" style="width:100%;justify-content:center;">
+            LinkedIn Profili
+          </a>
+        </div>
+      </aside>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  @media (max-width: 900px) {
+    .section .container {
+      grid-template-columns: 1fr !important;
+    }
+  }
+</style>
+
+<script>
+  // Ürün sayfasından gelen ?konu= parametresini forma taşı
+  const params = new URLSearchParams(window.location.search);
+  const konu = params.get('konu');
+  if (konu) {
+    const select = document.getElementById('konu') as HTMLSelectElement | null;
+    const mesaj = document.getElementById('mesaj') as HTMLTextAreaElement | null;
+    if (select) select.value = 'Ürün Bilgisi / Teklif';
+    if (mesaj && !mesaj.value) mesaj.value = `"${konu}" ürünü hakkında bilgi almak istiyorum.\n\n`;
+  }
+</script>

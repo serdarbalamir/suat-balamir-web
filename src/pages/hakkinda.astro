@@ -1,0 +1,141 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import site from '../data/site.json';
+
+const articles = (await getCollection('makaleler', ({ data }) => !data.draft)).sort(
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+);
+
+// Kariyer zaman çizelgesi — Decap CMS "Site Ayarları" üzerinden değil,
+// bu sayfadan veya src/data/timeline.json üzerinden güncellenebilir.
+import timeline from '../data/timeline.json';
+---
+
+<BaseLayout
+  title="Hakkında"
+  description="Suat Balamir — Gezer Endüstri Genel Müdür Yardımcısı. Su, atıksu ve yağmur suyu altyapı sistemleri uzmanı, Su ve Çevre Teknolojileri Dergisi yazarı."
+>
+  <div class="page-header">
+    <div class="container">
+      <nav class="breadcrumb" aria-label="breadcrumb">
+        <a href="/">Ana Sayfa</a> <span>/</span> <span>Hakkında</span>
+      </nav>
+      <h1>Suat Balamir</h1>
+      <p>{site.author.title}</p>
+    </div>
+  </div>
+
+  <section class="section">
+    <div class="container" style="display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:56px;align-items:start;">
+      <div class="prose">
+        <h2 style="margin-top:0;">Biyografi</h2>
+        <p>
+          Suat Balamir, su, atıksu ve yağmur suyu altyapı sistemleri alanında uzmanlaşmış
+          bir mühendis ve yöneticidir. Gezer Endüstri bünyesinde Genel Müdür Yardımcısı
+          olarak görev yapmakta; ürün geliştirme, teknik projelendirme ve mühendislik
+          çözümleri süreçlerini yönetmektedir.
+        </p>
+        <p>
+          Alman su ve atıksu mühendisliği standartları (DWA / ATV) üzerine yaptığı
+          incelemeler, birleşik kanalizasyon sistemlerinde yağışlı hava deşarjı (CSO)
+          yönetimi, yağmur suyu geciktirme yapıları ve kentsel drenaj boyutlandırması
+          konularındaki teknik makaleleri <strong>Su ve Çevre Teknolojileri Dergisi</strong>'nde
+          yayınlanmaktadır.
+        </p>
+        <p>
+          Yayınlarında, uluslararası standartlardaki mühendislik yaklaşımlarını Türkiye'deki
+          mevzuat ve uygulama pratiği ile karşılaştırarak, ülkemizde kentsel taşkın riskinin
+          azaltılması ve alıcı ortam kalitesinin korunması için uygulanabilir öneriler
+          geliştirmeyi amaçlamaktadır.
+        </p>
+
+        <h2>Kariyer</h2>
+        <div class="timeline">
+          {timeline.career.map((item) => (
+            <div class="timeline-item">
+              <span class="period">{item.period}</span>
+              <h3>{item.role}</h3>
+              <span class="org">{item.org}</span>
+              <p>{item.description}</p>
+            </div>
+          ))}
+        </div>
+
+        <h2>Eğitim</h2>
+        <div class="timeline">
+          {timeline.education.map((item) => (
+            <div class="timeline-item">
+              <span class="period">{item.period}</span>
+              <h3>{item.role}</h3>
+              <span class="org">{item.org}</span>
+              {item.description && <p>{item.description}</p>}
+            </div>
+          ))}
+        </div>
+
+        <h2>Yayınlar</h2>
+        <p>
+          Su ve Çevre Teknolojileri Dergisi başta olmak üzere sektörel mecralarda
+          yayınlanmış teknik makaleler:
+        </p>
+        <ul>
+          {articles.map((a) => (
+            <li>
+              <a href={`/makaleler/${a.id}`}>{a.data.title}</a>
+              {a.data.ilkYayinKaynagi && (
+                <span style="color:var(--gray-500);font-size:0.9em;"> — {a.data.ilkYayinKaynagi}</span>
+              )}
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <aside class="sidebar">
+        <div class="sidebar-box" style="text-align:center;">
+          {site.author.photo ? (
+            <img
+              src={site.author.photo}
+              alt={site.author.name}
+              style="width:160px;height:160px;border-radius:50%;object-fit:cover;margin:0 auto 16px;border:3px solid var(--water-100);"
+            />
+          ) : (
+            <div
+              style="width:160px;height:160px;border-radius:50%;background:var(--navy-800);color:rgba(255,255,255,0.6);display:flex;align-items:center;justify-content:center;margin:0 auto 16px;font-size:0.8rem;"
+            >
+              Fotoğraf
+            </div>
+          )}
+          <div style="font-weight:700;color:var(--navy-800);font-size:1.1rem;">{site.author.name}</div>
+          <div style="font-size:0.88rem;color:var(--gray-500);margin-bottom:16px;">{site.author.title}</div>
+          <a href={site.author.linkedin} target="_blank" rel="noopener" class="btn btn-primary" style="width:100%;justify-content:center;">
+            LinkedIn Profili
+          </a>
+        </div>
+
+        <div class="sidebar-box">
+          <h4>Uzmanlık Alanları</h4>
+          <ul>
+            {site.expertise.map((e) => <li>{e}</li>)}
+          </ul>
+        </div>
+
+        <div class="sidebar-box">
+          <h4>İletişim</h4>
+          <ul>
+            <li><a href="/iletisim">İletişim formu →</a></li>
+            <li><a href={`mailto:${site.author.email}`}>{site.author.email}</a></li>
+          </ul>
+        </div>
+      </aside>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  @media (max-width: 1000px) {
+    .section .container {
+      grid-template-columns: 1fr !important;
+    }
+  }
+</style>
